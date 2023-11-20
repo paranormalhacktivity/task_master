@@ -1,0 +1,150 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require_relative '../lib/task_master'
+
+module TaskMaster
+  class CommandLineInterface
+    def initialize
+      @options = {}
+    end
+
+    def parse_options
+      OptionParser.new do |opts|
+        opts.banner = 'Usage: task_master [options]'
+
+        opts.on('-h', '--help', 'Display this help message') do
+          display_help(opts)
+          exit
+        end
+
+        opts.on('-r', '--report REPORT', 'Generate a specific report') do |report|
+          @options[:report] = report.downcase
+        end
+
+        opts.on('--sort_by FIELD', 'Specify the field to sort by') do |field|
+          @options[:sort_by] = field
+        end
+
+        opts.on('--order ORDER', 'Specify the sort order (asc/desc)') do |order|
+          @options[:order] = order.downcase.to_sym
+        end
+
+        opts.on('--status STATUS', 'Filter by status') do |status|
+          @options[:status] = status
+        end
+
+        opts.on('--assignee ASSIGNEE', 'Filter by assignee') do |assignee|
+          @options[:assignee] = assignee
+        end
+
+        opts.on('-c', '--csv FILE', 'Generate report using csv file data') do |csv|
+          @options[:csv] = csv
+        end
+      end.parse!
+
+      validate_options
+    end
+
+    def run
+      parse_options
+      generate_report
+    end
+
+    private
+
+    def generate_report
+      case @options[:report]
+      when 'task_list'
+        TaskMaster::ReportGenerator.new(
+          repository_adapter,
+          TaskMaster::OutputHandlers::ListReport::TerminalHandler.new
+        ).task_list_report(sort_by: @options[:sort_by], order: @options[:order])
+
+      when 'overdue_tasks'
+        TaskMaster::ReportGenerator.new(
+          repository_adapter,
+          TaskMaster::OutputHandlers::ListReport::TerminalHandler.new
+        ).overdue_tasks_report(sort_by: @options[:sort_by], order: @options[:order])
+
+      when 'tasks_by_status'
+        TaskMaster::ReportGenerator.new(
+          repository_adapter,
+          TaskMaster::OutputHandlers::ListReport::TerminalHandler.new
+        ).tasks_by_status_report(@options[:status], sort_by: @options[:sort_by], order: @options[:order])
+
+      when 'tasks_by_assignee'
+        TaskMaster::ReportGenerator.new(
+          repository_adapter,
+          TaskMaster::OutputHandlers::ListReport::TerminalHandler.new
+        ).tasks_by_assignee_report(@options[:assignee], sort_by: @options[:sort_by], order: @options[:order])
+
+      when 'upcoming_tasks'
+        TaskMaster::ReportGenerator.new(
+          repository_adapter,
+          TaskMaster::OutputHandlers::ListReport::TerminalHandler.new
+        ).upcoming_tasks_report(sort_by: @options[:sort_by], order: @options[:order])
+
+      when 'completed_tasks'
+        TaskMaster::ReportGenerator.new(
+          repository_adapter,
+          TaskMaster::OutputHandlers::ListReport::TerminalHandler.new
+        ).completed_tasks_report(sort_by: @options[:sort_by], order: @options[:order])
+
+      when 'task_summary'
+        TaskMaster::ReportGenerator.new(
+          repository_adapter,
+          TaskMaster::OutputHandlers::TaskSummaryReport::TerminalHandler.new
+        ).task_summary_report
+
+      when 'task_distribution'
+        TaskMaster::ReportGenerator.new(
+          repository_adapter,
+          TaskMaster::OutputHandlers::TaskDistributionReport::TerminalHandler.new
+        ).task_distribution_report
+
+      when 'countdown'
+        TaskMaster::ReportGenerator.new(
+          repository_adapter,
+          TaskMaster::OutputHandlers::CountdownReport::TerminalHandler.new
+        ).countdown_report
+      else
+        puts 'Invalid report specified. Use -h for help.'
+      end
+    end
+
+    def repository_adapter
+      TaskMaster::TaskRepository::CsvAdapter.new(@options[:csv])
+    end
+
+    def validate_options
+      if @options[:report].nil? && @options[:csv].nil?
+        puts "Report type and csv file must be specified. User the --report and --csv options"
+        exit
+      elsif @options[:report] == "tasks_by_status" && @options[:status].nil?
+        puts "Status must be specified for this report. Use the --status option."
+        exit
+      elsif @options[:report] == "tasks_by_assignee" && @options[:assignee].nil?
+        puts "Assignee must be specified for this report. Use the --assignee option."
+        exit
+      end
+    end
+
+    def display_help(opts)
+      puts opts
+      puts "\nAvailable Reports:"
+      puts "- task_list: Task List Report"
+      puts "- overdue_tasks: Overdue Tasks Report"
+      puts "- task_by_status: Task by Status Report"
+      puts "- task_by_assignee: Task by Assignee Report"
+      puts "- upcoming_tasks: Upcoming Tasks Report"
+      puts "- completed_tasks: Completed Tasks Report"
+      puts "- task_summary: Task Summary Report"
+      puts "- task_distribution: Task Distribution Report"
+      puts "- countdown: Countdown Report"
+    end
+  end
+end
+
+cli = TaskMaster::CommandLineInterface.new
+cli.run
