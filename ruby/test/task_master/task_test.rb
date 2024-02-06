@@ -224,6 +224,19 @@ class TaskMaster::TaskTest < Minitest::Test
     )
   end
 
+  def test_should_return_false_if_the_task_has_a_due_date_that_is_not_past_due
+    tomorrow = Date.today + 1
+    refute(
+      @class_name.new(
+        id: "1",
+        name: "Chore",
+        assignee: "John Smith",
+        due_on: tomorrow.to_s,
+        status: "In Progress"
+      ).overdue?
+    )
+  end
+
   def test_should_return_the_number_of_days_until_due_date_as_integer
     expected = 7
     next_week = Date.today + expected
@@ -239,7 +252,7 @@ class TaskMaster::TaskTest < Minitest::Test
     )
   end
 
-  def test_should_return_the_number_of_days_until_due_date_should_positive_if_due_on_in_future
+  def test_should_return_the_number_of_days_until_due_date_as_positive_if_due_on_in_future
     next_week = Date.today + 7
     assert(
       @class_name.new(

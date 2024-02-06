@@ -1,0 +1,203 @@
+#! /usr/bin/env node
+
+const path = require('path');
+const Task = require(path.join(__dirname, '../lib/Task'));
+const ReportGenerator = require(path.join(__dirname, '../lib/ReportGenerator'));
+const Report = require(path.join(__dirname, '../lib/Report'));
+const AsciiTable = require(path.join(__dirname, '../lib/AsciiTable'));
+const TaskRepository = require(path.join(__dirname, '../lib/TaskRepository'));
+const TaskRepositoryCsvAdapter = require(path.join(__dirname, '../lib/taskRepository/CsvAdapter'));
+const ListReportTerminalHandler = require(path.join(__dirname, '../lib/outputHandlers/listReport/TerminalHandler'));
+const TaskSummaryReportTerminalHandler = require(path.join(__dirname, '../lib/outputHandlers/taskSummaryReport/TerminalHandler'));
+const TaskDistributionReportTerminalHandler = require(path.join(__dirname, '../lib/outputHandlers/taskDistributionReport/TerminalHandler'));
+const CountdownReportTerminalHandler = require(path.join(__dirname, '../lib/outputHandlers/countdownReport/TerminalHandler'));
+
+class CommandLineInterface {
+	constructor() {
+		this.options = process.argv.slice(2)
+	}
+
+	parseOptions() {
+		const options = {
+			report: undefined,
+			sort_by: undefined,
+			order: undefined,
+			status: undefined,
+			assignee: undefined,
+			csv: undefined,
+		};
+
+		for (let i = 0; i < this.options.length; i++) {
+			const arg = this.options[i];
+
+			switch (arg) {
+				case '-h':
+				case '--help':
+					this.displayHelp();
+					process.exit(0);
+					break;
+
+				case '-r':
+				case '--report':
+					options.report = this.options[i + 1].toLowerCase();
+					i++;
+					break;
+
+				case '--sort_by':
+					options.sort_by = this.options[i + 1];
+					i++;
+					break;
+
+				case '--order':
+					options.order = this.options[i + 1].toLowerCase();
+					i++;
+					break;
+
+				case '--status':
+					options.status = this.options[i + 1];
+					i++;
+					break;
+
+				case '--assignee':
+					options.assignee = this.options[i + 1];
+					i++;
+					break;
+
+				case '-c':
+				case '--csv':
+					options.csv = this.options[i + 1];
+					i++;
+					break;
+
+				default:
+					console.error(`Unknown option: ${arg}`);
+					this.displayHelp();
+					process.exit(1);
+					break;
+			}
+		}
+
+		this.options = options
+		this.validateOptions()
+		return options
+	}
+
+	run() {
+		this.parseOptions()
+		this.generateReport()
+	}
+
+	generateReport() {
+		switch(this.options.report) {
+			case 'task_list':
+				return new ReportGenerator(
+					this.repositoryAdapter(),
+					new ListReportTerminalHandler()
+				).taskListReport({ sortBy: this.options.sort_by, order: this.options.order })
+			case 'overdue_tasks':
+				return new ReportGenerator(
+					this.repositoryAdapter(),
+					new ListReportTerminalHandler()
+				).overdueTasksReport({ sortBy: this.options.sort_by, order: this.options.order })
+
+			case 'tasks_by_status':
+				return new ReportGenerator(
+					this.repositoryAdapter(),
+					new ListReportTerminalHandler()
+				).tasksByStatusReport({ statuses: this.options.status, sortBy: this.options.sort_by, order: this.options.order })
+
+			case 'tasks_by_assignee':
+				return new ReportGenerator(
+					this.repositoryAdapter(),
+					new ListReportTerminalHandler()
+				).tasksByAssigneeReport({ assignees: this.options.assignee, sortBy: this.options.sort_by, order: this.options.order })
+
+			case 'upcoming_tasks':
+				return new ReportGenerator(
+					this.repositoryAdapter(),
+					new ListReportTerminalHandler()
+				).upcomingTasksReport({ sortBy: this.options.sort_by, order: this.options.order })
+
+			case 'completed_tasks':
+				return new ReportGenerator(
+					this.repositoryAdapter(),
+					new ListReportTerminalHandler()
+				).completedTasksReport({ sortBy: this.options.sort_by, order: this.options.order })
+
+			case 'task_summary':
+				return new ReportGenerator(
+					this.repositoryAdapter(),
+					new TaskSummaryReportTerminalHandler()
+				).taskSummaryReport()
+
+			case 'task_distribution':
+				return new ReportGenerator(
+					this.repositoryAdapter(),
+					new TaskDistributionReportTerminalHandler()
+				).taskDistributionReport()
+
+			case 'countdown':
+				return new ReportGenerator(
+					this.repositoryAdapter(),
+					new CountdownReportTerminalHandler()
+				).countdownReport()
+
+			default:
+				console.error("Invalid report specified. Use -h for help.");
+				process.exit(1);
+				break;
+		}
+	}
+
+	repositoryAdapter() {
+		return new TaskRepositoryCsvAdapter(String(this.options.csv))
+	}
+
+	validateOptions() {
+		if (this.options.report == null || this.options.csv == null) {
+			console.error("Report type and csv file must be specified. Use the --report and --csv options")
+			process.exit(1);
+		} else if (this.options.report == "tasks_by_status" && this.options.status == null) {
+			console.error("Status must be specified for this report. Use the --status option.")
+			process.exit(1);
+		} else if (this.options.report == "tasks_by_assignee" && this.options.assignee == null) {
+			console.error("Assignee must be specified for this report. Use the --assignee option.")
+			process.exit(1);
+		}
+	}
+
+	helpMenu() {
+		return this.usageSection() + this.reportsSection()
+	}
+
+	usageSection() {
+		return [
+			"Usage: task_master_js [options]",
+			"\t-h, --help\t\t\tDisplay this help message",
+			"\t-r, --report REPORT\t\tGeneratea specific report",
+			"\t    --sort_by FIELD\t\tSpecify the field to sort by",
+			"\t    --order ORDER\t\tSpecify the sort order (asc/desc)",
+			"\t    --status STATUS\t\tFilter by status",
+			"\t    --assignee ASSIGNEE\t\tFilter by assignee",
+			"\t-c, --csv FILE\t\t\tGenerate report using csv file data"
+		].join("\n")
+	}
+
+	reportsSection() {
+		return [
+			"\nAvailable Reports:",
+			"\t- task_list: Task List Report",
+			"\t- overdue_tasks: Overdue Tasks Report",
+			"\t- task_by_status: Task by Status Report",
+			"\t- task_by_assignee: Task by Assignee Report",
+			"\t- upcoming_tasks: Upcoming Tasks Report",
+			"\t- completed_tasks: Completed Tasks Report",
+			"\t- task_summary: Task Summary Report",
+			"\t- task_distribution: Task Distribution Report",
+			"\t- countdown: Countdown Report"
+		].join("\n")
+	}
+}
+
+
+console.log(new CommandLineInterface().run())

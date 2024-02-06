@@ -11,6 +11,7 @@ RUN apk upgrade --no-cache --update && \
 		bash \
 		build-base \
 		ruby \
+		npm \
 		ruby-dev && \
 		cd ruby/ && \
 		gem install bundler && \

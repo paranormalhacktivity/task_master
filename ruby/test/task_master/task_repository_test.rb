@@ -37,7 +37,7 @@ class TaskMaster::TaskRepositoryTest < Minitest::Test
     end
   end
 
-  def test_should_list_tasks_as_overdue_if_they_happen_in_the_past_and_have_not_been_completed
+  def test_should_list_tasks_as_overdue_if_they_happened_in_the_past_and_are_incomplete
     expected = ["Bar"]
     Date.stub :today, Date.parse("2023-11-12") do
       assert_equal(

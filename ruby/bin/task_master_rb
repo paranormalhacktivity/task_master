@@ -11,10 +11,10 @@ module TaskMaster
 
     def parse_options
       OptionParser.new do |opts|
-        opts.banner = 'Usage: task_master [options]'
+        opts.banner = 'Usage: task_master_rb [options]'
 
         opts.on('-h', '--help', 'Display this help message') do
-          display_help(opts)
+          help_menu(opts)
           exit
         end
 
@@ -118,8 +118,8 @@ module TaskMaster
     end
 
     def validate_options
-      if @options[:report].nil? && @options[:csv].nil?
-        puts "Report type and csv file must be specified. User the --report and --csv options"
+      if @options[:report].nil? || @options[:csv].nil?
+        puts "Report type and csv file must be specified. Use the --report and --csv options"
         exit
       elsif @options[:report] == "tasks_by_status" && @options[:status].nil?
         puts "Status must be specified for this report. Use the --status option."
@@ -130,18 +130,36 @@ module TaskMaster
       end
     end
 
-    def display_help(opts)
-      puts opts
-      puts "\nAvailable Reports:"
-      puts "- task_list: Task List Report"
-      puts "- overdue_tasks: Overdue Tasks Report"
-      puts "- task_by_status: Task by Status Report"
-      puts "- task_by_assignee: Task by Assignee Report"
-      puts "- upcoming_tasks: Upcoming Tasks Report"
-      puts "- completed_tasks: Completed Tasks Report"
-      puts "- task_summary: Task Summary Report"
-      puts "- task_distribution: Task Distribution Report"
-      puts "- countdown: Countdown Report"
+    def help_menu(opts)
+      puts usage_section + reports_section
+    end
+
+    def usage_section
+      [
+        "Usage: task_master_js [options]",
+        "\t-h, --help\t\t\tDisplay this help message",
+        "\t-r, --report REPORT\t\tGeneratea specific report",
+        "\t    --sort_by FIELD\t\tSpecify the field to sort by",
+        "\t    --order ORDER\t\tSpecify the sort order (asc/desc)",
+        "\t    --status STATUS\t\tFilter by status",
+        "\t    --assignee ASSIGNEE\t\tFilter by assignee",
+        "\t-c, --csv FILE\t\t\tGenerate report using csv file data"
+      ].join("\n")
+    end
+
+    def reports_section
+      [
+        "\nAvailable Reports:",
+        "\t- task_list: Task List Report",
+        "\t- overdue_tasks: Overdue Tasks Report",
+        "\t- tasks_by_status: Task by Status Report",
+        "\t- tasks_by_assignee: Task by Assignee Report",
+        "\t- upcoming_tasks: Upcoming Tasks Report",
+        "\t- completed_tasks: Completed Tasks Report",
+        "\t- task_summary: Task Summary Report",
+        "\t- task_distribution: Task Distribution Report",
+        "\t- countdown: Countdown Report"
+      ].join("\n")
     end
   end
 end

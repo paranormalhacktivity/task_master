@@ -13,12 +13,12 @@ module TaskMaster
       list_report.generate_report(repository.list_overdue(sort_by: sort_by, order: order))
     end
 
-    def tasks_by_status_report(status, sort_by: "Task ID", order: :desc)
-      list_report.generate_report(repository.list_by_status(status, sort_by: sort_by, order: order))
+    def tasks_by_status_report(statuses, sort_by: "Task ID", order: :desc)
+      list_report.generate_report(repository.list_by_status(statuses, sort_by: sort_by, order: order))
     end
 
-    def tasks_by_assignee_report(assignee, sort_by: "Task ID", order: :desc)
-      list_report.generate_report(repository.list_by_assignee(assignee, sort_by: sort_by, order: order))
+    def tasks_by_assignee_report(assignees, sort_by: "Task ID", order: :desc)
+      list_report.generate_report(repository.list_by_assignee(assignees, sort_by: sort_by, order: order))
     end
 
     def upcoming_tasks_report(sort_by: "Task ID", order: :desc)

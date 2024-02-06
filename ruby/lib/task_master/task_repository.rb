@@ -8,12 +8,12 @@ module TaskMaster
       @list ||= @adapter.list.map { |task_data| Task.new(**task_data) }
     end
 
-    def list_by_status(status, sort_by: "Task ID", order: :desc)
-      list.select { |task| task.status_of?(status) }
+    def list_by_status(statuses, sort_by: "Task ID", order: :desc)
+      list.select { |task| task.status_of?(statuses) }
     end
 
-    def list_by_assignee(assignee, sort_by: "Task ID", order: :desc)
-      list.select { |task| task.assigned_to?(assignee) }
+    def list_by_assignee(assignees, sort_by: "Task ID", order: :desc)
+      list.select { |task| task.assigned_to?(assignees) }
     end
 
     def list_upcoming(sort_by: "Task ID", order: :desc)
