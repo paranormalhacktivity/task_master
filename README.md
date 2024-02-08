@@ -1,8 +1,10 @@
 # Multi-Language Project Task Tracker
 
-This repository contains a command-line application for tracking project tasks, written in various programming languages. The application parses CSV data, allowing users to generate different reports based on their project tasks.
-Table of Contents
+This repository contains a command-line application for tracking project tasks, written in various programming languages. The application parses CSV data(with support for other data stores to come), allowing users to generate different reports based on their project tasks.
 
+## Table of Contents
+
+    Motivation
     Getting Started
     Usage
     Supported Languages
@@ -22,12 +24,15 @@ I invite you to join me on this journey as I embark on the exciting challenge of
 ## Getting Started
 
 To get started with this project, follow the instructions specific to the programming language you're interested in. Please refer to the README in the respective language directory for detailed setup and usage instructions.
-Usage
+
+## Usage
 
 For detailed usage instructions, please refer to the `README.md` in the language-specific directories.
-Supported Languages
+
+## Supported Languages
 
     Ruby
+    Javascript
 
 ## Docker Support
 
@@ -35,14 +40,21 @@ You can also run this application using Docker. Refer to the Dockerfile for deta
 
 ```
 # Build Docker image
-docker build -t task-tracker .
+docker build -t task_master .
 
 # Run Docker container
-docker run -it task-tracker
+docker run -it task_master
+
+# If changes have been made post-build, run docker container with a volume, to reflect changes, without having to rebuild
+docker run --rm -it -v ${PWD}:/task_master
 ```
 
-Directory Structure
+## Directory Structure
 
+    `data/`: Contains data files that reporting can be dones on.
+    `docs/`: Contains my personal, documented thoughts as I go through each language iteration of this project.
+    `javascript/`: Contains the Javascript(NodeJS) version of the application.
     `ruby/`: Contains the Ruby version of the application.
 
+## License
 This project is licensed under the MIT License.

@@ -12,8 +12,6 @@ class TaskRepository {
 	}
 
 	listByStatus({statuses, sortBy, order}) {
-		console.log(statuses)
-		console.log("here")
 		return this.list().filter(task => {
 			return task.hasStatusOf(statuses) == true;
 		})
