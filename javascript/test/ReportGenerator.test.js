@@ -13,7 +13,7 @@ test("list report", () => {
 		mockHandler
 	)
 	generator.repository = mockRepository
-	expect(generator.taskListReport()).toStrictEqual(mockRepository.list())
+	expect(generator.taskListReport({})).toStrictEqual(mockRepository.list())
 })
 
 test("tasks by status report", () => {
@@ -22,7 +22,7 @@ test("tasks by status report", () => {
 		mockHandler
 	)
 	generator.repository = mockRepository
-	expect(generator.tasksByStatusReport("Test")).toStrictEqual(mockRepository.listByStatus("Test"))
+	expect(generator.tasksByStatusReport({statuses: ["Test"]})).toStrictEqual(mockRepository.listByStatus({statuses: ["Test"]}))
 })
 
 test("tasks by assignee report", () => {
@@ -31,7 +31,7 @@ test("tasks by assignee report", () => {
 		mockHandler
 	)
 	generator.repository = mockRepository
-	expect(generator.tasksByAssigneeReport("Test")).toStrictEqual(mockRepository.listByAssignee("Test"))
+	expect(generator.tasksByAssigneeReport({assignees: ["Test"]})).toStrictEqual(mockRepository.listByAssignee({assignees: ["Test"]}))
 })
 
 test("upcoming tasks report", () => {
@@ -40,7 +40,7 @@ test("upcoming tasks report", () => {
 		mockHandler
 	)
 	generator.repository = mockRepository
-	expect(generator.upcomingTaskReport()).toStrictEqual(mockRepository.listUpcoming())
+	expect(generator.upcomingTasksReport({})).toStrictEqual(mockRepository.listUpcoming())
 })
 
 test("overdue tasks report", () => {
@@ -49,7 +49,7 @@ test("overdue tasks report", () => {
 		mockHandler
 	)
 	generator.repository = mockRepository
-	expect(generator.overdueTasksReport()).toStrictEqual(mockRepository.listOverdue())
+	expect(generator.overdueTasksReport({})).toStrictEqual(mockRepository.listOverdue())
 })
 
 test("complete tasks report", () => {
@@ -58,7 +58,7 @@ test("complete tasks report", () => {
 		mockHandler
 	)
 	generator.repository = mockRepository
-	expect(generator.completedTaskReport()).toStrictEqual(mockRepository.listCompleted())
+	expect(generator.completedTasksReport({})).toStrictEqual(mockRepository.listComplete())
 })
 
 test("summary report", () => {
@@ -85,7 +85,7 @@ test("countdown report", () => {
 		mockHandler
 	)
 	generator.repository = mockRepository
-	expect(generator.countdownReport()).toStrictEqual(mockRepository.list())
+	expect(generator.countdownReport({})).toStrictEqual(mockRepository.list())
 })
 
 class TestRepository {
@@ -109,7 +109,7 @@ class TestRepository {
     ["list upcoming"]
 	}
 
-  listCompleted(sortBy, order) {
+  listComplete(sortBy, order) {
     ["list Completed"]
 	}
 }

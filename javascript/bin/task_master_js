@@ -33,7 +33,7 @@ class CommandLineInterface {
 			switch (arg) {
 				case '-h':
 				case '--help':
-					this.displayHelp();
+					console.log(this.helpMenu());
 					process.exit(0);
 					break;
 
@@ -71,7 +71,7 @@ class CommandLineInterface {
 
 				default:
 					console.error(`Unknown option: ${arg}`);
-					this.displayHelp();
+					console.log(this.helpMenu());
 					process.exit(1);
 					break;
 			}

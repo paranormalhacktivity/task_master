@@ -8,7 +8,7 @@ beforeEach(() => {
 test("should generate a report by passing data to the output handler to generate output", () => {
 	testData = "This is a test"
 	expected = testData + " that it made it to the handler"
-	expect(new className(new TestHandler()).generateReport(testData)).toStrictEqual(expected);
+	expect(new className(new TestHandler()).generate(testData)).toStrictEqual(expected);
 });
 
 

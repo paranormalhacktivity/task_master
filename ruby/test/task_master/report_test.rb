@@ -10,7 +10,7 @@ class TaskMaster::ReportTest < Minitest::Test
     expected = test_data + " that it made it to the handler"
     assert_equal(
       expected,
-      @class_name.new(TestHandler.new).generate_report(test_data)
+      @class_name.new(TestHandler.new).generate(test_data)
     )
   end
 

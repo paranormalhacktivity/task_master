@@ -18,7 +18,7 @@ test("should delegate to the list function of the supplied adapter", () => {
 
 test("should filter list of tasks by status", () => {
 	const expected = ["Foo"];
-	const actual = new className(mockAdapter).listByStatus("Completed").map(element => {
+	const actual = new className(mockAdapter).listByStatus({statuses: ["Completed"]}).map(element => {
 		return element.name;
 	});
 	expect(actual).toStrictEqual(expected);
@@ -26,7 +26,7 @@ test("should filter list of tasks by status", () => {
 
 test("should filter list of tasks by assignee", () => {
 	const expected = ["Baz"];
-	const actual = new className(mockAdapter).listByAssignee("John Smith").map(element => {
+	const actual = new className(mockAdapter).listByAssignee({assignees: "John Smith"}).map(element => {
 		return element.name;
 	});
 	expect(actual).toStrictEqual(expected);

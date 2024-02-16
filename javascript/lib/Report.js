@@ -3,7 +3,7 @@ class Report {
 		this.outputHandler = outputHandler
 	}
 
-	generateReport(data) {
+	generate(data) {
 		return this.outputHandler.generateOutput(data)
 	}
 }

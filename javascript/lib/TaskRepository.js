@@ -17,7 +17,7 @@ class TaskRepository {
 		})
 	}
 
-	listByAssignee({ assignees, sortBy, order }) {
+	listByAssignee({assignees, sortBy, order}) {
 		return this.list().filter(task => {
 			return task.isAssignedTo(assignees) == true;
 		})

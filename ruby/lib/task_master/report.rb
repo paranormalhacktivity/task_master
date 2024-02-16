@@ -4,7 +4,7 @@ module TaskMaster
       @output_handler = output_handler
     end
 
-    def generate_report(data)
+    def generate(data)
       @output_handler.generate_output(data)
     end
   end

@@ -6,39 +6,39 @@ module TaskMaster
     end
 
     def task_list_report(sort_by: "Task ID", order: :desc)
-      list_report.generate_report(repository.list(sort_by: sort_by, order: order))
+      report.generate(repository.list(sort_by: sort_by, order: order))
     end
 
     def overdue_tasks_report(sort_by: "Task ID", order: :desc)
-      list_report.generate_report(repository.list_overdue(sort_by: sort_by, order: order))
+      report.generate(repository.list_overdue(sort_by: sort_by, order: order))
     end
 
     def tasks_by_status_report(statuses, sort_by: "Task ID", order: :desc)
-      list_report.generate_report(repository.list_by_status(statuses, sort_by: sort_by, order: order))
+      report.generate(repository.list_by_status(statuses, sort_by: sort_by, order: order))
     end
 
     def tasks_by_assignee_report(assignees, sort_by: "Task ID", order: :desc)
-      list_report.generate_report(repository.list_by_assignee(assignees, sort_by: sort_by, order: order))
+      report.generate(repository.list_by_assignee(assignees, sort_by: sort_by, order: order))
     end
 
     def upcoming_tasks_report(sort_by: "Task ID", order: :desc)
-      list_report.generate_report(repository.list_upcoming(sort_by: sort_by, order: order))
+      report.generate(repository.list_upcoming(sort_by: sort_by, order: order))
     end
 
     def completed_tasks_report(sort_by: "Task ID", order: :desc)
-      list_report.generate_report(repository.list_completed(sort_by: sort_by, order: order))
+      report.generate(repository.list_completed(sort_by: sort_by, order: order))
     end
 
     def task_summary_report
-      TaskMaster::Report.new(@output_handler).generate_report(repository.list)
+      report.generate(repository.list)
     end
 
     def task_distribution_report
-      TaskMaster::Report.new(@output_handler).generate_report(repository.list)
+      report.generate(repository.list)
     end
 
     def countdown_report(sort_by: "Task ID", order: :desc)
-      TaskMaster::Report.new(@output_handler).generate_report(repository.list(sort_by: sort_by, order: order))
+      report.generate(repository.list(sort_by: sort_by, order: order))
     end
 
     private
@@ -47,7 +47,7 @@ module TaskMaster
       TaskMaster::TaskRepository.new(@repository_adapter)
     end
 
-    def list_report
+    def report
       TaskMaster::Report.new(@output_handler)
     end
   end
