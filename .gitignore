@@ -2,3 +2,4 @@ ruby/coverage/
 ruby/tmp/*
 ruby/assets
 javascript/node_modules
+python/*.egg-info/

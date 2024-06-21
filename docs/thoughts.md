@@ -51,3 +51,42 @@ am at a reasonable place, to push up code, and possibly document some things tha
 as issues, so that I can come back later. Which does beg the question, should I take the
 time, to do those issues now, or am I gonna be impatient and move on to the next iteration
 in a new language? An even jucier question, what language is next...?
+
+### 2024-02-11
+"Enough with the suspense, Houston, what language did you go with?" Well, without further
+ado, lets get a drum roll for... *drumroll noises* Python! I went with python for the
+third language to learn and rewrite this application in. I figured it'd be a good language to
+pick up. Syntactically similar to Ruby while having a similar "feel" to javascript, it seem to
+make a lot of sense. If I didn't work so closely to javascript at work, I would have probably chosen
+python to be the second language, I think that would have made more sense if I was solely basing
+my next language off of what was the nearest "jump", but I digress, I think my path has made sense.
+It's not like I'm jumping from Ruby straight to C or Rust, although I do have high hopes that I make it
+to those languages, as I think that's probably where the real insights lie, but for now python
+will do. So far, it's been interesting. I'm taking a very different approach to the javascript
+iteration. I'm diving into the docs a little bit more, starting with the "Getting started", really
+trying to get a feel for what the language has to offer. I still think that ultimately I end
+structuring the project the same way that I have in the last two iterations. I don't know just
+yet, that I would come across anything that would make me rethink the way that I designed the
+system, although I do expect, when I come to a strictly functional language, that may change
+but I don't know, with languages that have support for OOP, I just don't know that I stray
+from my original design that much. I like that the OOP concepts that I introduced, should
+ultimately support extensibility, and I also liked that I implemented those concepts without
+the pitfalls of inheritance and state mutation. In some ways, I kinda felt like I wrote a very
+functional-esque Object-Orientated application, kinda the best of both worlds, but maybe that's
+just my bias, giving me rose colored glasses, and that's ultimately why I wanted to do this in
+the first place. What are the ideas that I'm missing out on? How will these other languages
+shape the way that I think about engineering? I've always wanted to take a stab at creating
+my own programming language, maybe this endeavor drives that pursuit. Maybe I'll be able
+to identify the things that I like in a language and the things that I don't like in a
+language. Kinda hard to say when you've only had experience with one language. Anyway, all
+that to say that I'm excited to start this next iteration! Off the jump, I've already identified
+some interesting things in python that may or may not be built into Ruby. One of those things,
+is the ability to define objects as falsy or truthy via the `__bool__` method. While I don't know what
+use cases, I would have for something like that, I did find it interesting and I'm sure too,
+that ruby has something similar, I just haven't discovered. Also I should mention, this
+isn't my first exposure to python. I did Google's "secret" foobar program, and all the code
+that I wrote for those challenges was in pyton, so I've had minimal exposure, but exposure nonetheless.
+None of it was as deep a dive, as I'm hoping to get this time around. That being said, things that I
+know I already don't like that much, strict indentation and the lack of some sort of ending
+notation, which ultimately comes back to Python's adherence to this weird indentation rule.
+I very much do not enjoy it.
